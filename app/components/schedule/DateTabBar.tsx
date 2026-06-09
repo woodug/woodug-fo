@@ -119,7 +119,7 @@ export default function DateTabBar({ base, selectedKey, onSelect }: Props) {
                 key={tab.key}
                 onClick={() => onSelect(tab.key)}
                 className={`flex flex-col items-center justify-center rounded-xl py-2 transition-colors ${
-                  isActive ? 'bg-blue-900' : 'bg-white'
+                  isActive ? 'bg-blue-900' : 'bg-white shadow-sm shadow-gray-200'
                 }`}
               >
                 <span
@@ -140,7 +140,7 @@ export default function DateTabBar({ base, selectedKey, onSelect }: Props) {
         {/* 캘린더 버튼 고정 */}
         <button
           onClick={() => setShowCalendar((v) => !v)}
-          className="flex-shrink-0 w-9 h-9 flex items-center justify-center text-gray-400 bg-gray-100 rounded-2xl ml-1"
+          className="flex-shrink-0 w-9 h-9 flex items-center justify-center text-gray-400 bg-white shadow-sm shadow-gray-200 rounded-xl ml-1"
         >
           <CalendarDays size={16} strokeWidth={2} />
         </button>

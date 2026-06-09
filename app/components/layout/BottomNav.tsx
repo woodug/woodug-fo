@@ -33,7 +33,7 @@ export default function BottomNav({ active, onChange }: Props) {
               onClick={() => onChange(item.label)}
               className="flex-1 flex flex-col items-center gap-1 py-3 transition-all"
             >
-              <span className={isActive ? 'text-blue-500' : 'text-gray-400'}>
+              <span className={`flex items-center justify-center w-10 h-10 rounded-2xl transition-colors ${isActive ? 'text-blue-500 bg-blue-50' : 'text-gray-400'}`}>
                 {item.icon(isActive)}
               </span>
               <span className={`text-[10px] font-bold ${isActive ? 'text-blue-500' : 'text-gray-400'}`}>
