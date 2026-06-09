@@ -14,7 +14,7 @@ export default function ViewingPage() {
   const nextId = Math.max(...list.map((v) => v.id), 0) + 1
 
   function handleAdd(viewing: Viewing) {
-    setList(prev => [...prev, viewing])
+    setList((prev) => [...prev, viewing])
   }
 
   return (
@@ -40,7 +40,7 @@ export default function ViewingPage() {
       {/* FAB */}
       <button
         onClick={() => setShowModal(true)}
-        className="fixed bottom-24 right-4 w-14 h-14 bg-blue-400 rounded-full flex items-center justify-center shadow-lg shadow-blue-200 z-40"
+        className="fixed bottom-28 right-4 w-14 h-14 bg-blue-400 rounded-full flex items-center justify-center shadow-lg shadow-blue-200 z-40"
       >
         <Plus size={26} strokeWidth={2.5} className="text-white" />
       </button>
