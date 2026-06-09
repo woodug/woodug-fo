@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { X, Check } from 'lucide-react'
 import { format } from 'date-fns'
@@ -25,6 +25,11 @@ function getGameDates() {
 }
 
 export default function AddViewingModal({ onClose, onAdd, nextId }: Props) {
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = '' }
+  }, [])
+
   const today = new Date(2026, 5, 8)
   const [calendarMonth, setCalendarMonth] = useState(today)
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined)
