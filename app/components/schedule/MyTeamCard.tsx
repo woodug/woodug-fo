@@ -5,8 +5,8 @@ export default function MyTeamCard() {
   return (
     <div className="mx-4 mb-4 rounded-2xl overflow-hidden shadow-sm">
       {/* 팀 정보 */}
-      <div className="bg-blue-400 flex items-center px-4 py-3 gap-3">
-        <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center flex-shrink-0">
+      <div className="bg-blue-500 flex items-center px-4 py-4 gap-3">
+        <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center flex-shrink-0 shadow-sm">
           <Image src="/logo/landers.svg" alt="SSG 랜더스" width={36} height={36} />
         </div>
         <div className="flex-1">
@@ -22,10 +22,10 @@ export default function MyTeamCard() {
       </div>
 
       {/* 다음 경기 */}
-      <div className="bg-blue-500 flex items-center px-4 py-2.5 gap-2">
-        <CalendarDays size={14} className="text-blue-200 flex-shrink-0" />
+      <div className="bg-blue-600 flex items-center px-4 py-3 gap-2">
+        <CalendarDays size={14} className="text-blue-300 flex-shrink-0" />
         <p className="text-white text-xs font-medium flex-1">다음 경기&nbsp;&nbsp;6.10(화) 18:30 vs KT 수원</p>
-        <span className="bg-blue-900 text-blue-200 text-xs font-bold px-2.5 py-1 rounded-full">D-2</span>
+        <span className="bg-blue-900 text-white text-xs font-black px-2.5 py-1 rounded-lg">D-2</span>
       </div>
     </div>
   )

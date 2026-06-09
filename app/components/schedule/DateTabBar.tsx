@@ -118,17 +118,17 @@ export default function DateTabBar({ base, selectedKey, onSelect }: Props) {
               <button
                 key={tab.key}
                 onClick={() => onSelect(tab.key)}
-                className={`flex flex-col items-center justify-center rounded-2xl py-2 transition-colors ${
-                  isActive ? 'bg-blue-500' : 'bg-gray-100'
+                className={`flex flex-col items-center justify-center rounded-xl py-2 transition-colors ${
+                  isActive ? 'bg-blue-900' : 'bg-white'
                 }`}
               >
                 <span
-                  className={`text-[11px] font-bold leading-tight ${isActive ? 'text-blue-200' : 'text-gray-400'}`}
+                  className={`text-[11px] font-bold leading-tight ${isActive ? 'text-blue-300' : 'text-gray-400'}`}
                 >
                   {tab.day}
                 </span>
                 <span
-                  className={`font-black text-sm leading-tight mt-0.5 ${isActive ? 'text-white' : 'text-gray-800'}`}
+                  className={`font-black text-base leading-tight mt-0.5 ${isActive ? 'text-white' : 'text-gray-800'}`}
                 >
                   {format(tab.date, 'd')}
                 </span>
