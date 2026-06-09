@@ -10,10 +10,22 @@ type NavItem = {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { label: '일정', icon: (a) => <CalendarDays size={22} strokeWidth={a ? 2.5 : 2} /> },
-  { label: '직관', icon: (a) => <Ticket size={22} strokeWidth={a ? 2.5 : 2} /> },
-  { label: '통계', icon: (a) => <BarChart2 size={22} strokeWidth={a ? 2.5 : 2} /> },
-  { label: '마이페이지', icon: (a) => <User size={22} strokeWidth={a ? 2.5 : 2} /> },
+  {
+    label: '일정',
+    icon: (a) => <CalendarDays size={22} strokeWidth={a ? 2.5 : 2} />,
+  },
+  {
+    label: '직관',
+    icon: (a) => <Ticket size={22} strokeWidth={a ? 2.5 : 2} />,
+  },
+  {
+    label: '통계',
+    icon: (a) => <BarChart2 size={22} strokeWidth={a ? 2.5 : 2} />,
+  },
+  {
+    label: '마이페이지',
+    icon: (a) => <User size={22} strokeWidth={a ? 2.5 : 2} />,
+  },
 ]
 
 type Props = {
@@ -24,19 +36,27 @@ type Props = {
 export default function BottomNav({ active, onChange }: Props) {
   return (
     <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-xl bg-white border-t border-gray-100 z-50">
-      <div className="flex items-center mx-2">
+      <div className="flex items-end mx-2">
         {NAV_ITEMS.map((item) => {
           const isActive = active === item.label
           return (
             <button
               key={item.label}
               onClick={() => onChange(item.label)}
-              className="flex-1 flex flex-col items-center gap-1 py-3 transition-all"
+              className="flex-1 flex flex-col items-center gap-1 pb-3 transition-all"
             >
-              <span className={`flex items-center justify-center w-10 h-10 rounded-2xl transition-colors ${isActive ? 'text-blue-500 bg-blue-50' : 'text-gray-400'}`}>
+              <span
+                className={`flex items-center justify-center w-12 h-12 rounded-2xl transition-all ${
+                  isActive
+                    ? 'text-blue-500 bg-white shadow-lg shadow-blue-100 -translate-y-4 border border-gray-100'
+                    : 'text-gray-400'
+                }`}
+              >
                 {item.icon(isActive)}
               </span>
-              <span className={`text-[10px] font-bold ${isActive ? 'text-blue-500' : 'text-gray-400'}`}>
+              <span
+                className={`text-[10px] font-bold ${isActive ? 'text-blue-500' : 'text-gray-400'}`}
+              >
                 {item.label}
               </span>
             </button>
