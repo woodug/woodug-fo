@@ -42,7 +42,7 @@ export default function Home() {
           <NoticeBanner />
           <DateTabBar base={BASE_DATE} selectedKey={selectedKey} onSelect={setSelectedKey} />
 
-          <div className="flex-1 overflow-y-auto pb-32">
+          <div className="flex-1 overflow-y-auto pb-40">
             <div className="px-4 py-3 flex items-center justify-between">
               <h2 className="text-lg font-black text-gray-900">
                 {getSectionLabel(selectedKey)}{' '}
