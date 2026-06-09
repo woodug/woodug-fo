@@ -5,3 +5,16 @@
   --primary-dark: #b91c1c;
   --primary-light: #fee2e2;
 }
+
+@keyframes slide-in-left {
+  from { transform: translateX(30px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+@keyframes slide-in-right {
+  from { transform: translateX(-30px); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+
+.animate-slide-left  { animation: slide-in-left  0.25s ease-out both; }
+.animate-slide-right { animation: slide-in-right 0.25s ease-out both; }

@@ -2,15 +2,16 @@
 
 import { useState } from 'react'
 import { ChevronRight, Settings } from 'lucide-react'
-import TopBar from './components/TopBar'
-import DateTabBar from './components/DateTabBar'
-import NoticeBanner from './components/NoticeBanner'
-import GameCard from './components/GameCard'
-import MyTeamCard from './components/MyTeamCard'
-import BottomNav, { Tab } from './components/BottomNav'
+import TopBar from './components/layout/TopBar'
+import BottomNav, { Tab } from './components/layout/BottomNav'
+import DateTabBar from './components/schedule/DateTabBar'
+import NoticeBanner from './components/schedule/NoticeBanner'
+import GameCard from './components/schedule/GameCard'
+import MyTeamCard from './components/schedule/MyTeamCard'
+import ViewingPage from './components/viewing/ViewingPage'
 import { scheduleData } from './data/schedule'
 
-const BASE_DATE = new Date(2026, 5, 8) // 2026-06-08
+const BASE_DATE = new Date(2026, 5, 8)
 
 function toKey(date: Date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
@@ -28,22 +29,21 @@ function getSectionLabel(key: string) {
 
 export default function Home() {
   const [selectedKey, setSelectedKey] = useState<string>(toKey(BASE_DATE))
-  const [activeTab, setActiveTab] = useState<Tab>('홈')
+  const [activeTab, setActiveTab] = useState<Tab>('일정')
 
   const games = scheduleData[selectedKey] ?? []
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen">
       <TopBar />
 
-      {activeTab === '홈' || activeTab === '일정' ? (
+      {activeTab === '일정' ? (
         <>
           <NoticeBanner />
           <DateTabBar base={BASE_DATE} selectedKey={selectedKey} onSelect={setSelectedKey} />
 
           <div className="flex-1 overflow-y-auto pb-32">
-            {/* 경기 섹션 헤더 */}
-            <div className="flex items-center justify-between px-4 py-3">
+            <div className="px-4 py-3 flex items-center justify-between">
               <h2 className="text-lg font-black text-gray-900">
                 {getSectionLabel(selectedKey)}{' '}
                 <span className="text-red-500">{games.length}</span>
@@ -53,7 +53,6 @@ export default function Home() {
               </button>
             </div>
 
-            {/* 경기 카드 목록 */}
             <div className="px-4 space-y-3">
               {games.length > 0 ? (
                 games.map((game) => <GameCard key={game.id} game={game} />)
@@ -65,7 +64,6 @@ export default function Home() {
               )}
             </div>
 
-            {/* 내 응원팀 섹션 */}
             <div className="flex items-center justify-between px-4 pt-6 pb-3">
               <h2 className="text-lg font-black text-gray-900">내 응원팀</h2>
               <button className="text-xs text-gray-400 font-semibold flex items-center gap-0.5">
@@ -75,6 +73,8 @@ export default function Home() {
             <MyTeamCard />
           </div>
         </>
+      ) : activeTab === '직관' ? (
+        <ViewingPage />
       ) : (
         <div className="flex-1 flex flex-col items-center justify-center gap-3 pb-32">
           <span className="text-5xl">🚧</span>
