@@ -11,7 +11,11 @@ type Props = {
   onConfirm: (team: KBOTeam) => void
 }
 
-export default function MyTeamModal({ currentTeam, onClose, onConfirm }: Props) {
+export default function MyTeamModal({
+  currentTeam,
+  onClose,
+  onConfirm,
+}: Props) {
   const [selected, setSelected] = useState<KBOTeam>(currentTeam)
   const [showConfirm, setShowConfirm] = useState(false)
 
@@ -29,10 +33,13 @@ export default function MyTeamModal({ currentTeam, onClose, onConfirm }: Props) 
   }
 
   return (
-    <div className="fixed inset-0 bg-white z-40 flex flex-col max-w-xl mx-auto left-0 right-0">
+    <div className="fixed inset-0 bg-white z-100 flex flex-col max-w-xl mx-auto left-0 right-0">
       {/* 헤더 */}
       <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100 flex-shrink-0">
-        <button onClick={onClose} className="flex items-center gap-1 text-sm font-semibold text-gray-700">
+        <button
+          onClick={onClose}
+          className="flex items-center gap-1 text-sm font-semibold text-gray-700"
+        >
           <ChevronLeft size={18} strokeWidth={2} />
           취소
         </button>
@@ -43,7 +50,7 @@ export default function MyTeamModal({ currentTeam, onClose, onConfirm }: Props) 
       {/* 팀 선택 그리드 */}
       <div className="flex-1 overflow-y-auto p-4">
         <div className="grid grid-cols-2 gap-3">
-          {KBO_TEAMS.map(team => {
+          {KBO_TEAMS.map((team) => {
             const isSelected = team.name === selected.name
             const isCurrent = team.name === currentTeam.name
 
@@ -71,7 +78,9 @@ export default function MyTeamModal({ currentTeam, onClose, onConfirm }: Props) 
 
                 {/* 현재 팀 표시 */}
                 {isCurrent && !isSelected && (
-                  <span className="text-[10px] font-bold text-gray-400">현재</span>
+                  <span className="text-[10px] font-bold text-gray-400">
+                    현재
+                  </span>
                 )}
               </button>
             )
@@ -85,9 +94,7 @@ export default function MyTeamModal({ currentTeam, onClose, onConfirm }: Props) 
           onClick={() => setShowConfirm(true)}
           disabled={!isChanged}
           className={`w-full py-3 rounded-xl font-black text-sm transition-colors ${
-            isChanged
-              ? 'bg-blue-900 text-white'
-              : 'bg-gray-100 text-gray-400'
+            isChanged ? 'bg-blue-900 text-white' : 'bg-gray-100 text-gray-400'
           }`}
         >
           변경하기
@@ -98,7 +105,9 @@ export default function MyTeamModal({ currentTeam, onClose, onConfirm }: Props) 
       {showConfirm && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
           <div className="bg-white rounded-2xl p-6 mx-4 w-full max-w-sm shadow-lg">
-            <p className="text-base font-black text-gray-900 mb-4 text-center">응원팀을 변경할까요?</p>
+            <p className="text-base font-black text-gray-900 mb-4 text-center">
+              응원팀을 변경할까요?
+            </p>
             <p className="text-sm text-gray-600 text-center mb-6">
               <span className="font-bold">{currentTeam.name}</span>
               <span className="text-gray-400"> → </span>
