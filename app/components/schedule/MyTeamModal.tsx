@@ -29,7 +29,7 @@ export default function MyTeamModal({ currentTeam, onClose, onConfirm }: Props) 
   }
 
   return (
-    <div className="fixed inset-0 bg-white z-50 flex flex-col max-w-xl mx-auto left-0 right-0">
+    <div className="fixed inset-0 bg-white z-40 flex flex-col max-w-xl mx-auto left-0 right-0">
       {/* 헤더 */}
       <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100 flex-shrink-0">
         <button onClick={onClose} className="flex items-center gap-1 text-sm font-semibold text-gray-700">
@@ -96,7 +96,7 @@ export default function MyTeamModal({ currentTeam, onClose, onConfirm }: Props) 
 
       {/* 확인 다이얼로그 */}
       {showConfirm && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center max-w-xl mx-auto left-0 right-0">
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
           <div className="bg-white rounded-2xl p-6 mx-4 w-full max-w-sm shadow-lg">
             <p className="text-base font-black text-gray-900 mb-4 text-center">응원팀을 변경할까요?</p>
             <p className="text-sm text-gray-600 text-center mb-6">
