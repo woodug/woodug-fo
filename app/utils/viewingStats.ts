@@ -13,7 +13,7 @@ export type WinRateStat = {
   winRate: number
 }
 
-export function getViewingResult(viewing: Viewing): GameResult | null {
+export function getViewingResult(viewing: Viewing, myTeam: string = MY_TEAM): GameResult | null {
   // 종료된 경기만 집계
   if (viewing.status !== '종료') {
     return null
@@ -24,8 +24,8 @@ export function getViewingResult(viewing: Viewing): GameResult | null {
     return null
   }
 
-  const myTeamIsHome = viewing.homeTeam === MY_TEAM
-  const myTeamIsAway = viewing.awayTeam === MY_TEAM
+  const myTeamIsHome = viewing.homeTeam === myTeam
+  const myTeamIsAway = viewing.awayTeam === myTeam
 
   // 내 팀이 경기에 참여하지 않으면 null
   if (!myTeamIsHome && !myTeamIsAway) {
@@ -66,11 +66,11 @@ export function calculateWinRate(results: GameResult[]): WinRateStat {
   }
 }
 
-export function getStadiumStats(viewings: Viewing[]): Map<string, WinRateStat> {
+export function getStadiumStats(viewings: Viewing[], myTeam: string = MY_TEAM): Map<string, WinRateStat> {
   const stadiumGroups = new Map<string, GameResult[]>()
 
   for (const viewing of viewings) {
-    const result = getViewingResult(viewing)
+    const result = getViewingResult(viewing, myTeam)
     if (result === null) continue
 
     const stadium = viewing.stadium
@@ -88,11 +88,11 @@ export function getStadiumStats(viewings: Viewing[]): Map<string, WinRateStat> {
   return statsMap
 }
 
-export function getDayOfWeekStats(viewings: Viewing[]): Map<number, WinRateStat> {
+export function getDayOfWeekStats(viewings: Viewing[], myTeam: string = MY_TEAM): Map<number, WinRateStat> {
   const dayGroups = new Map<number, GameResult[]>()
 
   for (const viewing of viewings) {
-    const result = getViewingResult(viewing)
+    const result = getViewingResult(viewing, myTeam)
     if (result === null) continue
 
     const [y, m, d] = viewing.date.split('-')

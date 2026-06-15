@@ -6,9 +6,8 @@ import StatusBadge from '../common/StatusBadge'
 
 type Props = {
   viewing: Viewing
+  myTeam: string
 }
-
-const MY_TEAM = 'SSG 랜더스'
 
 function formatDate(dateStr: string) {
   const [y, m, d] = dateStr.split('-')
@@ -17,7 +16,7 @@ function formatDate(dateStr: string) {
   return `${Number(m)}월 ${Number(d)}일(${dayNames[date.getDay()]})`
 }
 
-export default function ViewingCard({ viewing }: Props) {
+export default function ViewingCard({ viewing, myTeam }: Props) {
   const isFinished = viewing.status === '종료'
   const isUpcoming = viewing.status === '예정' || viewing.status === '진행중'
   const homeScore = viewing.homeScore ?? 0
@@ -25,8 +24,8 @@ export default function ViewingCard({ viewing }: Props) {
   const homeWon = isFinished && homeScore > awayScore
   const awayWon = isFinished && awayScore > homeScore
 
-  const myTeamIsHome = viewing.homeTeam === MY_TEAM
-  const myTeamIsAway = viewing.awayTeam === MY_TEAM
+  const myTeamIsHome = viewing.homeTeam === myTeam
+  const myTeamIsAway = viewing.awayTeam === myTeam
   const myTeamPlayed = myTeamIsHome || myTeamIsAway
 
   type BadgeVariant = 'win' | 'lose' | 'draw' | 'pre'

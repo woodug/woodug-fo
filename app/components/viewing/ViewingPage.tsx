@@ -6,7 +6,11 @@ import { viewings as initialViewings, Viewing } from '../../data/viewings'
 import ViewingCard from './ViewingCard'
 import AddViewingModal from './AddViewingModal'
 
-export default function ViewingPage() {
+type Props = {
+  myTeam: string
+}
+
+export default function ViewingPage({ myTeam }: Props) {
   const [list, setList] = useState<Viewing[]>(initialViewings)
   const [showModal, setShowModal] = useState(false)
 
@@ -33,7 +37,7 @@ export default function ViewingPage() {
       {/* 경기 목록 */}
       <div className="px-4 mt-4 space-y-3">
         {sorted.map((viewing) => (
-          <ViewingCard key={viewing.id} viewing={viewing} />
+          <ViewingCard key={viewing.id} viewing={viewing} myTeam={myTeam} />
         ))}
       </div>
 

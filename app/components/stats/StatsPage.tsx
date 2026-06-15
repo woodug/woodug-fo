@@ -203,31 +203,35 @@ function DayOfWeekSection({ dayStats }: { dayStats: Map<number, WinRateStat> }) 
   )
 }
 
-export default function StatsPage() {
+type Props = {
+  myTeam: string
+}
+
+export default function StatsPage({ myTeam }: Props) {
   const finishedViewings = viewings.filter(v => v.status === '종료')
 
   // 전체 통계
   const allResults = finishedViewings
-    .map(v => getViewingResult(v))
+    .map(v => getViewingResult(v, myTeam))
     .filter((r): r is 'win' | 'lose' | 'draw' => r !== null)
   const totalStat = calculateWinRate(allResults)
 
   // 홈/어웨이 통계
   const homeResults = finishedViewings
-    .filter(v => v.homeTeam === 'SSG 랜더스')
-    .map(v => getViewingResult(v))
+    .filter(v => v.homeTeam === myTeam)
+    .map(v => getViewingResult(v, myTeam))
     .filter((r): r is 'win' | 'lose' | 'draw' => r !== null)
   const homeStat = calculateWinRate(homeResults)
 
   const awayResults = finishedViewings
-    .filter(v => v.awayTeam === 'SSG 랜더스')
-    .map(v => getViewingResult(v))
+    .filter(v => v.awayTeam === myTeam)
+    .map(v => getViewingResult(v, myTeam))
     .filter((r): r is 'win' | 'lose' | 'draw' => r !== null)
   const awayStat = calculateWinRate(awayResults)
 
   // 구장별/요일별 통계
-  const stadiumStats = getStadiumStats(finishedViewings)
-  const dayStats = getDayOfWeekStats(finishedViewings)
+  const stadiumStats = getStadiumStats(finishedViewings, myTeam)
+  const dayStats = getDayOfWeekStats(finishedViewings, myTeam)
 
   return (
     <div className="flex-1 overflow-y-auto pb-32">

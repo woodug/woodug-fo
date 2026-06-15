@@ -8,9 +8,11 @@ import DateTabBar from './components/schedule/DateTabBar'
 import NoticeBanner from './components/schedule/NoticeBanner'
 import GameCard from './components/schedule/GameCard'
 import MyTeamCard from './components/schedule/MyTeamCard'
+import MyTeamModal from './components/schedule/MyTeamModal'
 import ViewingPage from './components/viewing/ViewingPage'
 import StatsPage from './components/stats/StatsPage'
 import { scheduleData } from './data/schedule'
+import { DEFAULT_TEAM, type KBOTeam } from './data/teams'
 
 const BASE_DATE = new Date(2026, 5, 8)
 
@@ -31,6 +33,8 @@ function getSectionLabel(key: string) {
 export default function Home() {
   const [selectedKey, setSelectedKey] = useState<string>(toKey(BASE_DATE))
   const [activeTab, setActiveTab] = useState<Tab>('일정')
+  const [myTeam, setMyTeam] = useState<KBOTeam>(DEFAULT_TEAM)
+  const [showTeamModal, setShowTeamModal] = useState(false)
 
   const games = scheduleData[selectedKey] ?? []
 
@@ -67,22 +71,33 @@ export default function Home() {
 
             <div className="flex items-center justify-between px-4 pt-6 pb-3">
               <h2 className="text-lg font-black text-gray-900">내 응원팀</h2>
-              <button className="text-xs text-gray-400 font-semibold flex items-center gap-0.5">
+              <button onClick={() => setShowTeamModal(true)} className="text-xs text-gray-400 font-semibold flex items-center gap-0.5">
                 설정 <Settings size={13} strokeWidth={2} className="ml-0.5" />
               </button>
             </div>
-            <MyTeamCard />
+            <MyTeamCard myTeam={myTeam} />
           </div>
         </>
       ) : activeTab === '직관' ? (
-        <ViewingPage />
+        <ViewingPage myTeam={myTeam.name} />
       ) : activeTab === '통계' ? (
-        <StatsPage />
+        <StatsPage myTeam={myTeam.name} />
       ) : (
         <div className="flex-1 flex flex-col items-center justify-center gap-3 pb-32">
           <span className="text-5xl">🚧</span>
           <p className="text-gray-400 font-medium">{activeTab} 탭은 준비 중이에요</p>
         </div>
+      )}
+
+      {showTeamModal && (
+        <MyTeamModal
+          currentTeam={myTeam}
+          onClose={() => setShowTeamModal(false)}
+          onConfirm={(team) => {
+            setMyTeam(team)
+            setShowTeamModal(false)
+          }}
+        />
       )}
 
       <BottomNav active={activeTab} onChange={setActiveTab} />
