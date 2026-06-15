@@ -9,6 +9,7 @@ import NoticeBanner from './components/schedule/NoticeBanner'
 import GameCard from './components/schedule/GameCard'
 import MyTeamCard from './components/schedule/MyTeamCard'
 import ViewingPage from './components/viewing/ViewingPage'
+import StatsPage from './components/stats/StatsPage'
 import { scheduleData } from './data/schedule'
 
 const BASE_DATE = new Date(2026, 5, 8)
@@ -75,6 +76,8 @@ export default function Home() {
         </>
       ) : activeTab === '직관' ? (
         <ViewingPage />
+      ) : activeTab === '통계' ? (
+        <StatsPage />
       ) : (
         <div className="flex-1 flex flex-col items-center justify-center gap-3 pb-32">
           <span className="text-5xl">🚧</span>
