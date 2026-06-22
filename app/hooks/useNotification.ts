@@ -1,18 +1,27 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { Game } from '@/app/lib/types'
 import { notificationStorage } from '@/app/store/storage'
 
 export function useNotification() {
-  const [permission, setPermission] = useState<NotificationPermission>('default')
-  const [enabled, setEnabledState] = useState(false)
+  const [initialNotificationState] = useState(() => {
+    if (typeof window === 'undefined' || !('Notification' in window)) {
+      return {
+        permission: 'default' as NotificationPermission,
+        enabled: false,
+      }
+    }
 
-  useEffect(() => {
-    if (typeof window === 'undefined' || !('Notification' in window)) return
-    setPermission(Notification.permission)
-    setEnabledState(notificationStorage.isEnabled())
-  }, [])
+    return {
+      permission: Notification.permission,
+      enabled: notificationStorage.isEnabled(),
+    }
+  })
+  const [permission, setPermission] = useState<NotificationPermission>(
+    initialNotificationState.permission
+  )
+  const [enabled, setEnabledState] = useState(initialNotificationState.enabled)
 
   const requestPermission = useCallback(async () => {
     if (!('Notification' in window)) return false

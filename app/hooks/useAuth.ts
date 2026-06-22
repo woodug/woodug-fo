@@ -1,18 +1,16 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { User } from '@/app/lib/types'
 import { userStorage, sessionStorage } from '@/app/store/storage'
 
 export function useAuth() {
-  const [user, setUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    const session = sessionStorage.get()
-    setUser(session)
-    setIsLoading(false)
-  }, [])
+  const [initialAuthState] = useState(() => ({
+    user: sessionStorage.get(),
+    isLoading: false,
+  }))
+  const [user, setUser] = useState<User | null>(initialAuthState.user)
+  const isLoading = initialAuthState.isLoading
 
   const login = useCallback((email: string, password: string): { ok: boolean; error?: string } => {
     const found = userStorage.findByEmail(email)

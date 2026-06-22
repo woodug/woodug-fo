@@ -1,17 +1,22 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { GameRecord } from '@/app/lib/types'
 import { recordStorage } from '@/app/store/storage'
 
-export function useRecords(userId: string | undefined) {
-  const [records, setRecords] = useState<GameRecord[]>([])
+const getRecordsForUser = (userId: string | undefined) => {
+  if (!userId) return []
+  return recordStorage.getByUser(userId).sort((a, b) => b.date.localeCompare(a.date))
+}
 
-  useEffect(() => {
-    if (!userId) return
-    const data = recordStorage.getByUser(userId)
-    setRecords(data.sort((a, b) => b.date.localeCompare(a.date)))
-  }, [userId])
+export function useRecords(userId: string | undefined) {
+  const [records, setRecords] = useState<GameRecord[]>(() => getRecordsForUser(userId))
+  const [prevUserId, setPrevUserId] = useState(userId)
+
+  if (userId !== prevUserId) {
+    setPrevUserId(userId)
+    setRecords(getRecordsForUser(userId))
+  }
 
   const addRecord = useCallback(
     (data: Omit<GameRecord, 'id' | 'userId' | 'createdAt'>) => {

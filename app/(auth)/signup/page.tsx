@@ -3,148 +3,104 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { useAuth } from '@/app/hooks/useAuth'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import { Input } from '@/app/components/ui/input'
 import { Button } from '@/app/components/ui/button'
-import { teams } from '@/app/data/teams'
-import { cn } from '@/app/lib/utils'
-import { Check } from 'lucide-react'
+import { useAuth } from '@/app/hooks/useAuth'
+
+const signupSchema = z
+  .object({
+    name: z.string().min(1, '이름을 입력해주세요'),
+    email: z.string().email('올바른 이메일을 입력해주세요'),
+    password: z.string().min(6, '비밀번호는 최소 6자 이상이어야 합니다'),
+    confirmPassword: z.string(),
+  })
+  .refine((d) => d.password === d.confirmPassword, {
+    message: '비밀번호가 일치하지 않습니다',
+    path: ['confirmPassword'],
+  })
+
+type SignupForm = z.infer<typeof signupSchema>
 
 export default function SignupPage() {
   const router = useRouter()
   const { signup } = useAuth()
-  const [form, setForm] = useState({ email: '', password: '', confirm: '', name: '' })
-  const [favoriteTeam, setFavoriteTeam] = useState('')
-  const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [serverError, setServerError] = useState('')
 
-  const set = (key: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
-    setForm((prev) => ({ ...prev, [key]: e.target.value }))
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<SignupForm>({
+    resolver: zodResolver(signupSchema),
+  })
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!form.email || !form.password || !form.name) {
-      setError('모든 필드를 입력해주세요.')
-      return
-    }
-    if (form.password !== form.confirm) {
-      setError('비밀번호가 일치하지 않습니다.')
-      return
-    }
-    if (form.password.length < 6) {
-      setError('비밀번호는 6자 이상이어야 합니다.')
-      return
-    }
-    if (!favoriteTeam) {
-      setError('응원팀을 선택해주세요.')
-      return
-    }
-    setIsLoading(true)
-    setError('')
-    const result = signup(form.email, form.password, form.name, favoriteTeam)
+  const onSubmit = async (data: SignupForm) => {
+    setServerError('')
+    const result = signup(data.email, data.password, data.name, '')
     if (result.ok) {
       router.push('/')
     } else {
-      setError(result.error ?? '회원가입에 실패했습니다.')
+      setServerError(result.error ?? '회원가입에 실패했습니다.')
     }
-    setIsLoading(false)
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-start justify-center px-4 py-8">
-      <div className="w-full max-w-[430px]">
-        <div className="text-center mb-6">
-          <h1 className="text-3xl font-black text-primary tracking-tight">우덕</h1>
-        </div>
-
-        <div className="bg-card rounded-[20px] shadow-sm border border-border p-6">
-          <h2 className="text-lg font-bold text-foreground mb-6">회원가입</h2>
-
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <Input
-              label="이름"
-              placeholder="홍길동"
-              value={form.name}
-              onChange={set('name')}
-              autoComplete="name"
-            />
-            <Input
-              label="이메일"
-              type="email"
-              placeholder="email@example.com"
-              value={form.email}
-              onChange={set('email')}
-              autoComplete="email"
-            />
-            <Input
-              label="비밀번호"
-              type="password"
-              placeholder="6자 이상"
-              value={form.password}
-              onChange={set('password')}
-              autoComplete="new-password"
-            />
-            <Input
-              label="비밀번호 확인"
-              type="password"
-              placeholder="비밀번호를 다시 입력하세요"
-              value={form.confirm}
-              onChange={set('confirm')}
-              autoComplete="new-password"
-            />
-
-            {/* 응원팀 선택 */}
-            <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-foreground">응원팀</label>
-              <div className="grid grid-cols-5 gap-2">
-                {teams.map((team) => (
-                  <button
-                    key={team.id}
-                    type="button"
-                    onClick={() => setFavoriteTeam(team.id)}
-                    className={cn(
-                      'relative flex flex-col items-center gap-1 p-2 rounded-[10px] border transition-all',
-                      favoriteTeam === team.id
-                        ? 'border-primary bg-blue-50'
-                        : 'border-border bg-white'
-                    )}
-                  >
-                    <div
-                      className="w-8 h-8 rounded-full flex items-center justify-center text-[9px] font-bold text-white"
-                      style={{ backgroundColor: team.color }}
-                    >
-                      {team.shortName}
-                    </div>
-                    <span className="text-[9px] text-foreground-secondary leading-tight text-center">
-                      {team.shortName}
-                    </span>
-                    {favoriteTeam === team.id && (
-                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center">
-                        <Check size={10} className="text-white" />
-                      </div>
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {error && (
-              <p className="text-sm text-danger text-center">{error}</p>
-            )}
-
-            <Button type="submit" size="full" disabled={isLoading} className="mt-2">
-              {isLoading ? '처리 중...' : '가입하기'}
-            </Button>
-          </form>
-
-          <p className="mt-4 text-center text-sm text-muted-foreground">
-            이미 계정이 있으신가요?{' '}
-            <Link href="/login" className="text-primary font-semibold">
-              로그인
-            </Link>
-          </p>
-        </div>
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+      <div className="mb-2">
+        <h1 className="text-2xl font-black text-gray-900">회원가입</h1>
+        <p className="text-sm text-gray-400 mt-1">직관 기록을 시작해보세요</p>
       </div>
-    </div>
+
+      <Input
+        label="이름"
+        type="text"
+        placeholder="홍길동"
+        autoComplete="name"
+        {...register('name')}
+        error={errors.name?.message}
+      />
+      <Input
+        label="이메일"
+        type="email"
+        placeholder="example@email.com"
+        autoComplete="email"
+        {...register('email')}
+        error={errors.email?.message}
+      />
+      <Input
+        label="비밀번호"
+        type="password"
+        placeholder="6자 이상 입력해주세요"
+        autoComplete="new-password"
+        {...register('password')}
+        error={errors.password?.message}
+      />
+      <Input
+        label="비밀번호 확인"
+        type="password"
+        placeholder="비밀번호를 다시 입력해주세요"
+        autoComplete="new-password"
+        {...register('confirmPassword')}
+        error={errors.confirmPassword?.message}
+      />
+
+      {serverError && (
+        <p className="text-sm text-red-500 text-center">{serverError}</p>
+      )}
+
+      <Button type="submit" size="full" disabled={isSubmitting} className="mt-2">
+        {isSubmitting ? '가입 중...' : '가입하기'}
+      </Button>
+
+      <p className="text-center text-sm text-gray-400 mt-2">
+        이미 계정이 있으신가요?{' '}
+        <Link href="/login" className="text-red-500 font-semibold">
+          로그인
+        </Link>
+      </p>
+    </form>
   )
 }
