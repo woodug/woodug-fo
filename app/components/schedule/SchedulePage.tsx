@@ -34,10 +34,11 @@ export default function SchedulePage({ myTeam, onOpenTeamModal }: SchedulePagePr
   const [selectedKey, setSelectedKey] = useState<string>(toKey(BASE_DATE))
 
   const games = scheduleData[selectedKey] ?? []
+  const todayGames = scheduleData[toKey(BASE_DATE)] ?? []
 
   return (
     <>
-      <NoticeBanner />
+      <NoticeBanner games={todayGames} />
       <DateTabBar base={BASE_DATE} selectedKey={selectedKey} onSelect={setSelectedKey} />
 
       <div className="flex-1 overflow-y-auto pb-40">

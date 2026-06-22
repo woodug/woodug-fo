@@ -11,7 +11,6 @@ export default function TopBar() {
         alt="우덕 로고"
         width={72}
         height={48}
-        // className="object-contain"
       />
       <button className="absolute right-4 w-9 h-9 flex items-center justify-center text-gray-700">
         <Bell size={20} strokeWidth={2} />

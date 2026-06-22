@@ -1,19 +1,10 @@
 import { Viewing } from '../data/viewings'
+import { GameResult, WinRateStat } from '../lib/types'
 
-export const MY_TEAM = 'SSG 랜더스'
+export type { GameResult, WinRateStat }
 export const DAY_NAMES = ['일', '월', '화', '수', '목', '금', '토']
 
-export type GameResult = 'win' | 'lose' | 'draw'
-
-export type WinRateStat = {
-  win: number
-  lose: number
-  draw: number
-  total: number
-  winRate: number
-}
-
-export function getViewingResult(viewing: Viewing, myTeam: string = MY_TEAM): GameResult | null {
+export function getViewingResult(viewing: Viewing, myTeam: string): GameResult | null {
   // 종료된 경기만 집계
   if (viewing.status !== '종료') {
     return null
@@ -66,7 +57,7 @@ export function calculateWinRate(results: GameResult[]): WinRateStat {
   }
 }
 
-export function getStadiumStats(viewings: Viewing[], myTeam: string = MY_TEAM): Map<string, WinRateStat> {
+export function getStadiumStats(viewings: Viewing[], myTeam: string): Map<string, WinRateStat> {
   const stadiumGroups = new Map<string, GameResult[]>()
 
   for (const viewing of viewings) {
@@ -88,7 +79,7 @@ export function getStadiumStats(viewings: Viewing[], myTeam: string = MY_TEAM): 
   return statsMap
 }
 
-export function getDayOfWeekStats(viewings: Viewing[], myTeam: string = MY_TEAM): Map<number, WinRateStat> {
+export function getDayOfWeekStats(viewings: Viewing[], myTeam: string): Map<number, WinRateStat> {
   const dayGroups = new Map<number, GameResult[]>()
 
   for (const viewing of viewings) {

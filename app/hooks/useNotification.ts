@@ -5,50 +5,21 @@ import { Game } from '@/app/lib/types'
 import { notificationStorage } from '@/app/store/storage'
 
 export function useNotification() {
-  const [initialNotificationState] = useState(() => {
-    if (typeof window === 'undefined' || !('Notification' in window)) {
-      return {
-        permission: 'default' as NotificationPermission,
-        enabled: false,
-      }
-    }
-
-    return {
-      permission: Notification.permission,
-      enabled: notificationStorage.isEnabled(),
-    }
-  })
-  const [permission, setPermission] = useState<NotificationPermission>(
-    initialNotificationState.permission
+  const permission: NotificationPermission = 'granted'
+  const [enabled, setEnabledState] = useState(() =>
+    typeof window !== 'undefined' ? notificationStorage.isEnabled() : false
   )
-  const [enabled, setEnabledState] = useState(initialNotificationState.enabled)
 
-  const requestPermission = useCallback(async () => {
-    if (!('Notification' in window)) return false
-    const result = await Notification.requestPermission()
-    setPermission(result)
-    if (result === 'granted') {
-      notificationStorage.setEnabled(true)
-      setEnabledState(true)
-    }
-    return result === 'granted'
+  const requestPermission = useCallback(async () => true, [])
+
+  const toggleEnabled = useCallback((value: boolean) => {
+    notificationStorage.setEnabled(value)
+    setEnabledState(value)
   }, [])
-
-  const toggleEnabled = useCallback(
-    async (value: boolean) => {
-      if (value && permission !== 'granted') {
-        const granted = await requestPermission()
-        if (!granted) return
-      }
-      notificationStorage.setEnabled(value)
-      setEnabledState(value)
-    },
-    [permission, requestPermission]
-  )
 
   const scheduleGameNotification = useCallback(
     (game: Game, teamName: string) => {
-      if (!enabled || permission !== 'granted') return
+      if (!enabled) return
 
       const gameDateTime = new Date(`${game.date}T${game.time}:00`)
       const notifyAt = gameDateTime.getTime() - 30 * 60 * 1000
@@ -63,7 +34,7 @@ export function useNotification() {
         })
       }, delay)
     },
-    [enabled, permission]
+    [enabled]
   )
 
   return { permission, enabled, requestPermission, toggleEnabled, scheduleGameNotification }

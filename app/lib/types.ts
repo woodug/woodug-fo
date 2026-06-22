@@ -59,3 +59,13 @@ export interface StandingEntry {
   winRate: number
   streak: string
 }
+
+export type GameResult = 'win' | 'lose' | 'draw'
+
+export interface WinRateStat {
+  win: number
+  lose: number
+  draw: number
+  total: number
+  winRate: number
+}
